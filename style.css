@@ -1,0 +1,228 @@
+/* 기본 초기화 */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
+    sans-serif;
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 유틸리티 클래스 */
+.hidden {
+  display: none !important;
+}
+
+/* 랜덤 배경 이미지 */
+#bg-image {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  z-index: -1;
+  filter: brightness(0.9); /* 이미지를 약간 어둡게 */
+  transition: background-image 0.5s ease-in-out;
+}
+
+/* 위젯 박스 공통 디자인 (글래스모피즘) */
+.widget-box,
+input[type="text"],
+button {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: white;
+}
+
+/* 날씨 위젯 */
+#weather {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 10px 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+}
+
+.weather-icon img {
+  width: 40px;
+  height: 40px;
+}
+
+.weather-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.location {
+  font-weight: bold;
+}
+.temp {
+  font-size: 1.2rem;
+}
+.desc {
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+/* 중앙 위젯 컨테이너 */
+.central-widget {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  max-width: 600px;
+}
+
+/* 시계 & 날짜 */
+.clock {
+  font-weight: 200;
+  margin-bottom: 5px;
+}
+
+.big-clock {
+  font-size: 6rem;
+}
+
+.date-text {
+  font-size: 1.2rem;
+  font-weight: 300;
+  margin-bottom: 40px;
+  opacity: 0.9;
+}
+
+/* 인사말 */
+#greeting {
+  font-size: 2rem;
+  font-weight: 400;
+  margin-bottom: 30px;
+}
+
+/* 입력창 & 버튼 공통 */
+input[type="text"] {
+  padding: 12px 20px;
+  font-size: 1rem;
+  outline: none;
+  transition: background 0.3s;
+}
+
+input[type="text"]::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+input[type="text"]:focus {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+button {
+  padding: 12px 24px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* 로그인 폼 */
+#login-form {
+  display: flex;
+  gap: 10px;
+}
+
+/* 할 일 섹션 */
+#todo-section {
+  width: 100%;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#todo-section h3 {
+  font-weight: 300;
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+}
+
+#todo-form {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  max-width: 450px;
+}
+
+#todo-form input {
+  flex-grow: 1;
+}
+
+/* 할 일 목록 */
+#todo-list {
+  list-style: none;
+  width: 100%;
+  max-width: 450px;
+  margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#todo-list li {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 10px 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1rem;
+}
+
+#todo-list li span {
+  flex-grow: 1;
+  text-align: left;
+}
+
+#todo-list li button {
+  background: transparent;
+  border: none;
+  backdrop-filter: none;
+  padding: 5px 10px;
+  font-size: 0.8rem;
+  margin-left: 5px;
+  border-radius: 6px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+#todo-list li button:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+}
+
+/* 로그아웃 버튼 */
+.top-left-btn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  font-size: 0.8rem;
+  padding: 8px 15px;
+}
