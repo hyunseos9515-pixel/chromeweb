@@ -1,6 +1,6 @@
 // [🔑 환경 설정]
-const API_KEY = "e09346b58c32bf773e23cb8c0c8156f6"; // 👈 여기에 OpenWeatherMap API 키를 입력하세요! (따옴표 안에)
-const IMG_COUNT = 5; // img 폴더에 넣은 이미지 개수
+const API_KEY = "e09346b58c32bf773e23cb8c0c8156f6";
+const IMG_COUNT = 5;
 
 // [📺 DOM 요소]
 const loginContainer = document.querySelector("#login-container");
@@ -47,7 +47,6 @@ function getClock() {
 // -----------------------------------------
 function setRandomBackground() {
   const randomNum = Math.floor(Math.random() * IMG_COUNT);
-  // 파일명을 0.jpg, 1.jpg, 2.jpg로 고정했습니다.
   bgImage.style.backgroundImage = `url('img/${randomNum}.jpg')`;
 }
 
@@ -55,8 +54,7 @@ function setRandomBackground() {
 // [👤 3. 로그인 / 로그아웃]
 // -----------------------------------------
 function paintGreeting(username) {
-  const date = new Date();
-  const hours = date.getHours();
+  const hours = new Date().getHours();
   let timeText = "안녕하세요";
 
   if (hours >= 5 && hours < 12) timeText = "좋은 아침이에요";
@@ -78,26 +76,13 @@ function displayScreens(isLoggedIn) {
   }
 }
 
-function onLoginSubmit(event) {
-  event.preventDefault();
-  const usernameInput = loginInput.value;
-  localStorage.setItem(USERNAME_KEY, usernameInput);
-  displayScreens(true);
-  paintGreeting(usernameInput);
-}
-
-function onLogoutClick() {
-  localStorage.removeItem(USERNAME_KEY);
-  if (window.resetToDos) window.resetToDos(); // g-todo.js의 초기화 함수 호출
-  window.location.reload();
-}
-
 // -----------------------------------------
-// [🌦️ 4. 날씨 & 위치 API]
+// [🌦️ 4. 실제 날씨 API 호출]
 // -----------------------------------------
 function onGeoOk(position) {
   const lat = position.coords.latitude;
   const lon = position.coords.longitude;
+  // 한국어 설정(&lang=kr)과 섭씨 온도(&units=metric)가 적용된 URL입니다.
   const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric&lang=kr`;
 
   fetch(url)
@@ -106,20 +91,36 @@ function onGeoOk(position) {
       const cityEl = weatherWidget.querySelector(".location");
       const tempEl = weatherWidget.querySelector(".temp");
       const descEl = weatherWidget.querySelector(".desc");
-      const iconEl = weatherWidget.querySelector(".weather-icon");
 
-      cityEl.innerText = data.name;
+      cityEl.innerText = `${data.name}-si`;
       tempEl.innerText = `${Math.round(data.main.temp)}°C`;
       descEl.innerText = data.weather[0].description;
-
-      const iconCode = data.weather[0].icon;
-      iconEl.innerHTML = `<img src="https://openweathermap.org/img/wn/${iconCode}@2x.png">`;
     })
-    .catch(() => console.log("날씨 정보를 불러올 수 없습니다."));
+    .catch((error) =>
+      console.log("날씨 정보를 가져오는 데 실패했습니다.", error),
+    );
 }
 
 function onGeoError() {
-  console.log("위치 정보 권한이 거부되었습니다.");
+  alert("위치 정보를 허용하지 않아 실시간 날씨를 불러올 수 없습니다.");
+}
+
+// -----------------------------------------
+// [➕ 이벤트 핸들러]
+// -----------------------------------------
+function onLoginSubmit(event) {
+  event.preventDefault();
+  const usernameInput = loginInput.value;
+  localStorage.setItem(USERNAME_KEY, usernameInput);
+  displayScreens(true);
+  paintGreeting(usernameInput);
+  navigator.geolocation.getCurrentPosition(onGeoOk, onGeoError);
+}
+
+function onLogoutClick() {
+  localStorage.removeItem(USERNAME_KEY);
+  if (window.resetToDos) window.resetToDos();
+  window.location.reload();
 }
 
 // -----------------------------------------
@@ -137,9 +138,7 @@ const savedUsername = localStorage.getItem(USERNAME_KEY);
 if (savedUsername) {
   displayScreens(true);
   paintGreeting(savedUsername);
-  if (API_KEY) {
-    navigator.geolocation.getCurrentPosition(onGeoOk, onGeoError);
-  }
+  navigator.geolocation.getCurrentPosition(onGeoOk, onGeoError);
 } else {
   displayScreens(false);
 }
